@@ -1,31 +1,22 @@
 use reqwest::header;
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
 use std::env;
 use std::string::String;
 
-#[derive(Deserialize, Serialize, Debug)]
-#[serde(untagged)]
-pub enum Assignee {
-    Simple(String),
-    Assignee { login: String },
+#[derive(Deserialize, Debug)]
+pub struct Assignee {
+    login: String,
 }
 
-#[derive(Deserialize, Serialize, Debug)]
-#[serde(untagged)]
-pub enum Response {
-    Simple(String),
-    Assignee {
-        login: String,
-    },
-    Issue {
-        url: String,
-        title: String,
-        updated_at: String,
-        assignees: Vec<Assignee>,
-    },
+#[derive(Deserialize, Debug)]
+pub struct Response {
+    url: String,
+    title: String,
+    updated_at: String,
+    assignees: Vec<Assignee>,
 }
 
-pub async fn get_issues() -> Result<Vec<Response>, Box<dyn std::error::Error>> {
+pub async fn get_issues() -> Vec<Response> {
     let mut headers = header::HeaderMap::new();
 
     let token_var: String = env::var("TOKEN").unwrap_or("no token".into());
@@ -41,13 +32,13 @@ pub async fn get_issues() -> Result<Vec<Response>, Box<dyn std::error::Error>> {
     headers.insert(header::USER_AGENT, "request".parse().unwrap());
     headers.insert(header::AUTHORIZATION, token.parse().unwrap());
 
-    let res = reqwest::Client::new()
+    reqwest::Client::new()
         .get(url)
         .headers(headers)
         .send()
-        .await?
+        .await
+        .unwrap()
         .json::<Vec<Response>>()
-        .await?;
-
-    Ok(res)
+        .await
+        .unwrap()
 }

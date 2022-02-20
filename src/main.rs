@@ -1,10 +1,10 @@
 mod issues;
 
 #[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
+async fn main() {
     let issues = issues::get_issues().await;
 
-    println!("{:#?}", issues);
-
-    Ok(())
+    for issue in issues {
+        println!("{:?}", issue);
+    }
 }
