@@ -1,3 +1,4 @@
+use crate::structs::IssueWithEvents;
 mod helpers;
 mod issues;
 mod structs;
@@ -7,8 +8,11 @@ async fn main() {
     let issues = issues::get_issues().await;
 
     for issue in issues {
-        let events = issues::get_issue_events(&issue.events_url).await;
-        println!("{:?}", issue);
-        println!("{:?}", events);
+        let new_issue = IssueWithEvents {
+            events: issues::get_issue_events(&issue.events_url).await,
+            issue,
+        };
+
+        println!("{:?}", new_issue);
     }
 }

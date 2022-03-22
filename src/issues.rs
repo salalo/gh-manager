@@ -1,25 +1,30 @@
-use reqwest::header;
-use serde::Deserialize;
+use crate::helpers::setup_headers;
+use crate::structs::{Event, Issue};
 use std::env;
 use std::string::String;
 
-#[derive(Deserialize, Debug)]
-pub struct Assignee {
-    login: String,
+// User interacted with an issue if: (below being actual gh api event names)
+// added_to_project
+// closed
+// reopened
+// commented
+// commited
+
+//pub fn filter_out_untouched_issues(issues: &mut Vec<Issue>, login: String) -> &Vec<Issue> {}
+
+pub async fn get_issue_events(events_url: &str) -> Vec<Event> {
+    reqwest::Client::new()
+        .get(events_url)
+        .headers(setup_headers())
+        .send()
+        .await
+        .unwrap()
+        .json::<Vec<Event>>()
+        .await
+        .unwrap()
 }
 
-#[derive(Deserialize, Debug)]
-pub struct Response {
-    url: String,
-    title: String,
-    updated_at: String,
-    assignees: Vec<Assignee>,
-}
-
-pub async fn get_issues() -> Vec<Response> {
-    let mut headers = header::HeaderMap::new();
-
-    let token_var: String = env::var("TOKEN").unwrap_or("no token".into());
+pub async fn get_issues() -> Vec<Issue> {
     let org_var: String = env::var("ORG").unwrap_or("no org".into());
     let repo_var: String = env::var("REPO").unwrap_or("no repo".into());
 
@@ -27,18 +32,14 @@ pub async fn get_issues() -> Vec<Response> {
         "https://api.github.com/repos/{}/{}/issues",
         &org_var, &repo_var
     );
-    let token: String = format!("token {}", &token_var);
-
-    headers.insert(header::USER_AGENT, "request".parse().unwrap());
-    headers.insert(header::AUTHORIZATION, token.parse().unwrap());
 
     reqwest::Client::new()
         .get(url)
-        .headers(headers)
+        .headers(setup_headers())
         .send()
         .await
         .unwrap()
-        .json::<Vec<Response>>()
+        .json::<Vec<Issue>>()
         .await
         .unwrap()
 }

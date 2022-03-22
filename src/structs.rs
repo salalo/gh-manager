@@ -8,11 +8,19 @@ pub struct Issue {
 }
 
 #[derive(Deserialize, Debug)]
-pub struct Event {
-    actor: Actor,
-    event: String,
+pub struct IssueWithEvents {
+    pub issue: Issue,
+    pub events: Vec<Event>,
 }
+
 #[derive(Deserialize, Debug)]
-struct Actor {
-    login: String,
+pub struct Event {
+    pub actor: Actor,
+    event: String,
+    created_at: String,
+}
+
+#[derive(Deserialize, Debug)]
+pub struct Actor {
+    pub login: String,
 }
