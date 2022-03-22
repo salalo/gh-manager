@@ -5,9 +5,7 @@ mod structs;
 
 #[tokio::main]
 async fn main() {
-    let issues = issues::get_issues().await;
-
-    for issue in issues {
+    for issue in issues::get_issues().await {
         let new_issue = IssueWithEvents {
             events: issues::get_issue_events(&issue.events_url).await,
             issue,
