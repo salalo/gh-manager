@@ -5,12 +5,25 @@ mod structs;
 
 #[tokio::main]
 async fn main() {
+    let mut filtered_issues = Vec::<IssueWithEvents>::new();
+    let mut issues_titles = Vec::<String>::new();
+
     for issue in issues::get_issues().await {
-        let new_issue = IssueWithEvents {
+        let events_issue = IssueWithEvents {
             events: issues::get_issue_events(&issue.events_url).await,
             issue,
         };
 
-        println!("{:?}", new_issue);
+        let issue_valid = events_issue
+            .events
+            .iter()
+            .any(|e| issues::filter_out_untouched_issues(&e));
+
+        if issue_valid {
+            issues_titles.push(events_issue.issue.title.clone());
+            filtered_issues.push(events_issue);
+        }
     }
+    println!("{:?}", filtered_issues);
+    println!("{:?}", issues_titles);
 }

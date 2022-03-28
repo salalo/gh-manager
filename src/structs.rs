@@ -3,7 +3,7 @@ use serde::Deserialize;
 #[derive(Deserialize, Debug)]
 pub struct Issue {
     url: String,
-    title: String,
+    pub title: String,
     pub events_url: String,
 }
 
@@ -16,7 +16,7 @@ pub struct IssueWithEvents {
 #[derive(Deserialize, Debug)]
 pub struct Event {
     pub actor: Actor,
-    event: String,
+    pub event: String,
     created_at: String,
 }
 

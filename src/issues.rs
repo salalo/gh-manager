@@ -10,7 +10,23 @@ use std::string::String;
 // commented
 // commited
 
-//pub fn filter_out_untouched_issues(issues: &mut Vec<Issue>, login: String) -> &Vec<Issue> {}
+pub fn filter_out_untouched_issues(event: &Event) -> bool {
+    let gh_events: Vec<&str> = vec![
+        "added_to_project",
+        "closed",
+        "reopened",
+        "commented",
+        "commited",
+        //"labeled",
+    ];
+
+    // check time of event creation? - depends on the gh api
+    if event.actor.login == "salalo" && gh_events.contains(&&event.event[..]) {
+        true
+    } else {
+        false
+    }
+}
 
 pub async fn get_issue_events(events_url: &str) -> Vec<Event> {
     reqwest::Client::new()
