@@ -10,7 +10,7 @@ use std::string::String;
 // commented
 // commited
 
-pub fn filter_out_untouched_issues(event: &Event) -> bool {
+pub fn get_touched_issues(event: &Event) -> bool {
     let gh_events: Vec<&str> = vec![
         "added_to_project",
         "closed",

@@ -17,7 +17,7 @@ async fn main() {
         let issue_valid = events_issue
             .events
             .iter()
-            .any(|e| issues::filter_out_untouched_issues(&e));
+            .any(|e| issues::get_touched_issues(&e));
 
         if issue_valid {
             issues_titles.push(events_issue.issue.title.clone());
