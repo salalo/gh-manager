@@ -5,6 +5,8 @@ mod structs;
 
 #[tokio::main]
 async fn main() {
+    println!("Fetching todays issues you've worked on...");
+
     let mut filtered_issues = Vec::<IssueWithEvents>::new();
     let mut issues_titles = Vec::<String>::new();
 
@@ -24,6 +26,8 @@ async fn main() {
             filtered_issues.push(events_issue);
         }
     }
-    println!("{:?}", filtered_issues);
-    println!("{:?}", issues_titles);
+
+    for title in issues_titles {
+        println!("{:?}", title);
+    }
 }
