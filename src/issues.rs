@@ -3,21 +3,17 @@ use crate::structs::{Event, Issue};
 use std::env;
 use std::string::String;
 
-// User interacted with an issue if: (below being actual gh api event names)
-// added_to_project
-// closed
-// reopened
-// commented
-// commited
-
 pub fn get_touched_issues(event: &Event) -> bool {
+    // these are actual gh api event action names
     let gh_events: Vec<&str> = vec![
         "added_to_project",
         "closed",
         "reopened",
         "commented",
         "commited",
-        //"labeled",
+        "mentioned",
+        "labeled",
+        "moved_columns_in_project",
     ];
 
     // check time of event creation? - depends on the gh api
