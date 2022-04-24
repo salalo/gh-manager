@@ -28,6 +28,6 @@ async fn main() {
     }
 
     for title in issues_titles {
-        println!("{:?}", title);
+        println!("`{}`", title);
     }
 }
