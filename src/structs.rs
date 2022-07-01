@@ -9,7 +9,7 @@ pub struct Issue {
 
 #[derive(Deserialize, Debug)]
 pub struct IssueWithEvents {
-    pub issue: Issue,
+    pub title: String,
     pub events: Vec<Event>,
 }
 
