@@ -5,12 +5,7 @@ pub struct Issue {
     url: String,
     pub title: String,
     pub events_url: String,
-}
-
-#[derive(Deserialize, Debug)]
-pub struct IssueWithEvents {
-    pub issue: Issue,
-    pub events: Vec<Event>,
+    pub events: Option<bool>,
 }
 
 #[derive(Deserialize, Debug)]
